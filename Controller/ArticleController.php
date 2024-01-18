@@ -37,14 +37,36 @@ class ArticleController
             }
     
             return $articles;        
-        } catch (\Throwable $th) {
-            //throw $th;
+        } catch (Error $error) {
+            echo $error;
         }
-       
     }
 
     public function show()
     {
-        // TODO: this can be used for a detail page
+        $article = $this->findOne();
+
+        require 'View/articles/show.php';
+    }
+
+    private function findOne()
+    {
+        try {
+            $query = "SELECT * FROM articles where id = :id ;";
+
+            $statement = $this->databaseManager->connection->prepare($query);
+
+            $statement->bindParam(":id", $_GET["id"]);
+
+            $statement->execute();
+            $rawArticles = $statement->fetchAll();
+    
+            $article = new Article($rawArticles[0]['id'], $rawArticles[0]['title'], $rawArticles[0]['description'], $rawArticles[0]['publish_date']);
+    
+            return $article;        
+        } catch (Error $error) {
+            echo $error;
+        }
+        
     }
 }
