@@ -13,6 +13,9 @@ require 'Controller/HomepageController.php';
 require 'Controller/ArticleController.php';
 
 require_once 'Core/DatabaseManager.php';
+require_once 'config.php';
+$databaseManager = new DatabaseManager($config["host"], $config["user"], $config["password"], $config["db_name"]);
+$databaseManager->connect();
 
 // Get the current page to load
 // If nothing is specified, it will remain empty (home should be loaded)
@@ -22,10 +25,10 @@ $page = $_GET['page'] ?? null;
 // It will *control* the rest of the work to load the page
 switch ($page) {
     case 'articles-index':
-        (new ArticleController())->index();
+        (new ArticleController($databaseManager))->index();
         break;
     case 'articles-show':
-        // TODO: detail page
+        (new ArticleController($databaseManager))->show();
     case 'home':
     default:
         (new HomepageController())->index();
