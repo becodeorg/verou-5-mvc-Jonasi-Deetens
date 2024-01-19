@@ -4,11 +4,11 @@
 
 <section>
     <h1><?= $article->title ?></h1>
-    <p><?= $article->formatPublishDate() ?></p>
+    <p><?= $article->formatPublishDate("m-d-y") ?></p>
     <p><?= $article->description ?></p>
 
     <?php // TODO: links to next and previous ?>
-    <a href="#">Previous article</a>
+    <a href="index.php?page=articles-show&id=">Previous article</a>
     <a href="#">Next article</a>
 </section>
 
