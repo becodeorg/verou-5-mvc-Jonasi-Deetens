@@ -44,7 +44,29 @@ class ArticleController
 
     public function show()
     {
-        $article = $this->findOne();
+        $article = "";
+        $action = $_GET["action"];
+        $id = $_GET["id"];
+
+        if (isset($action)) {
+            $articles = $this->getArticles();
+            $indexOfCurrentArticle = 0;
+            $indexOfNewArticle = 0;
+
+            foreach($articles as $index => $article) {
+                if ($article->id == $id) $indexOfCurrentArticle = $index;
+            }
+
+            if ($action === "next") {
+                $indexOfNewArticle = ($indexOfCurrentArticle + 1) % count($articles);
+            } else {
+                if (($indexOfCurrentArticle - 1) < 0)
+                    $indexOfNewArticle = count($articles) - 1;
+                else
+                    $indexOfNewArticle = ($indexOfCurrentArticle - 1);
+            }
+            $article = $articles[$indexOfNewArticle];
+        } else $article = $this->findOne();
 
         require 'View/articles/show.php';
     }
